@@ -51,7 +51,7 @@ def add_team(team_id: str, team_name: str, endpoint_url: str, user_id: str) -> b
 def add_to_queue(team_id: str) -> int:
     db = get_db()
     
-    queued_docs = db.collection('queue').where('status', '==', QueueStatus.QUEUED.value).stream()
+    queued_docs = db.collection('queue').where(filter=firestore.FieldFilter('status', '==', QueueStatus.QUEUED.value)).stream()
     max_position = 0
     for doc in queued_docs:
         pos = doc.to_dict().get('position', 0)
@@ -89,11 +89,11 @@ def get_queue_status(team_id: str) -> Optional[QueueEntry]:
 def get_next_in_queue() -> Optional[str]:
     db = get_db()
     
-    evaluating_docs = list(db.collection('queue').where('status', '==', QueueStatus.EVALUATING.value).limit(1).stream())
+    evaluating_docs = list(db.collection('queue').where(filter=firestore.FieldFilter('status', '==', QueueStatus.EVALUATING.value)).limit(1).stream())
     if evaluating_docs:
         return None
     
-    queued_docs = list(db.collection('queue').where('status', '==', QueueStatus.QUEUED.value).stream())
+    queued_docs = list(db.collection('queue').where(filter=firestore.FieldFilter('status', '==', QueueStatus.QUEUED.value)).stream())
     
     if not queued_docs:
         return None
