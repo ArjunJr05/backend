@@ -1,7 +1,13 @@
 import asyncio
+import os
 from app.db.firebase_service import get_next_in_queue, update_queue_status, get_team_endpoint, save_result
 from app.db.models import QueueStatus
-from app.core.evaluator import Evaluator
+
+# Use lite evaluator on Vercel to avoid 250MB limit
+if os.getenv("USE_LITE_EVALUATOR") == "1":
+    from app.core.evaluator_lite import Evaluator
+else:
+    from app.core.evaluator import Evaluator
 
 evaluator = Evaluator()
 

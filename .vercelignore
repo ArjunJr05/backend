@@ -21,3 +21,9 @@ htmlcov/
 *.sqlite
 *.sqlite3
 app/data/*.db
+export_test_data.py
+deploy.sh
+setup_env.sh
+Dockerfile
+.dockerignore
+FIREBASE_SETUP.md
